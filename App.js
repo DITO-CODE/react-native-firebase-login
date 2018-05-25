@@ -7,6 +7,8 @@ import firebase from 'firebase';
 
 export default class App extends React.Component {
   
+  state = { loggedIn: null }
+
   componentWillMount(){
     firebase.initializeApp(
       {
@@ -18,11 +20,21 @@ export default class App extends React.Component {
         messagingSenderId: "531593114819"
       }
     );
+
+    firebase.auth().onAuthStateChanged((user)=>{
+      if(user){
+        this.setState({ loggedIn: true })
+      }else{
+        this.setState({ loggedIn: false })
+      }
+    });
   }
+
+  
   
   render() {
     return (
-      <AppContent />
+      <AppContent loggedIn={this.state.loggedIn} />
     );
   }
 }
